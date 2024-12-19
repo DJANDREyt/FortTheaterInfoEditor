@@ -10,7 +10,7 @@ public class Settings
     public string LastOpenedLoadDirectory { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     public string LastOpenedSaveDirectory { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     public bool DarkMode { get; set; } = false;
-    public EGame UEVersion { get; set; } = EGame.GAME_UE4_16;
+    public EGame UEVersion { get; set; } = EGame.GAME_UE4_0;
     public string PaksDirectory { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     public string Culture { get; set; } = "en";
     public bool LoadLastLoadedJsonOnLoad { get; set; } = false;

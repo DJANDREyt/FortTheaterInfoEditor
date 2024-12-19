@@ -601,24 +601,31 @@ namespace FortTheaterInfoEditor
             return false;
         }
 
-        private void EditorWindow_Load(object sender, EventArgs e)
+        private void LoadPaks()
         {
+            if(Settings.UEVersion == EGame.GAME_UE4_0)
+            {
+                AddLog("Please select UE Version before loading paks!");
+                return;
+            }
             if (IsValidPaksDirectory())
             {
                 try
                 {
+                    if (FileProvider != null) FileProvider.Dispose();
                     FileProvider = new DefaultFileProvider(Settings.PaksDirectory, SearchOption.TopDirectoryOnly, true, new VersionContainer(Settings.UEVersion));
                     FileProvider.Initialize();
                     if (Settings.AESKey != "0x0")
                         FileProvider.SubmitKey(new FGuid(), new FAesKey(Settings.AESKey));
+                    else
+                    {
+                        AddLog("Please input an aes key, you can get one for your version here: https://github.com/dippyshere/fortnite-aes-archive/tree/master/archive");
+                        return;
+                    }
                     AddLog($"Loaded paks from folder: {Settings.PaksDirectory} using ue version: {Settings.UEVersion.ToString()}");
 
                     var list = FileProvider.Files.ToList();
                     AddLog($"files: {list.Count}");
-                    /*foreach (var file in FileProvider.Files.ToList())
-                    {
-                        AddLog($"{file.Key}");
-                    }*/
                 }
                 catch (Exception ex)
                 {
@@ -630,6 +637,12 @@ namespace FortTheaterInfoEditor
             {
                 AddLog("ERROR: Failed to Load Paks, please select a valid paks directory in Settings -> Paks Directory");
             }
+            
+        }
+
+        private void EditorWindow_Load(object sender, EventArgs e)
+        {
+            LoadPaks();
 
             if (Settings.LoadLastLoadedJsonOnLoad && Settings.LastLoadedJson != "none")
             {
@@ -752,6 +765,7 @@ namespace FortTheaterInfoEditor
                     Settings.UEVersion = (EGame)clickedItem.Tag;
 
                     AddLog($"New UE Version: {Settings.UEVersion.ToString()}");
+                    LoadPaks();
                 }
             }
 
@@ -764,11 +778,12 @@ namespace FortTheaterInfoEditor
 
         private void aESKeyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string aes = Interaction.InputBox("Enter AES Key (if needed):", "AES Key Input", "0x0");
+            string aes = Interaction.InputBox("Enter AES Key, you can get one here:\nhttps://github.com/dippyshere/fortnite-aes-archive/tree/master/archive", "AES Key Input", "0x0");
 
             if (!string.IsNullOrEmpty(aes))
             {
                 Settings.AESKey = aes;
+                LoadPaks();
             }
         }
     }
