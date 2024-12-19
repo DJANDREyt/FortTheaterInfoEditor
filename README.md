@@ -1,6 +1,9 @@
 # FortTheaterInfoEditor
  Fortnite (STW) World Info Editor
 
+# WIP
+ This Project is in a very early stage
+
 # TO-DOs
  - implement missions alerts view in the tree
  - render zone themes and hex zones somehow
