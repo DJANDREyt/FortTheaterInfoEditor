@@ -746,6 +746,7 @@ namespace FortTheaterInfoEditor
                 {
                     Settings.PaksDirectory = folderDialog.SelectedPath;
                     AddLog($"New Paks Directory: {Settings.PaksDirectory}");
+                    LoadPaks();
                 }
             }
         }
